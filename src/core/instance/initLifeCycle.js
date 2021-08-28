@@ -9,7 +9,7 @@ function initLifeCycle(Spider) {
       value: instanceId++
     })
     this.__proto__.__allInstance__[this.id] = this
-    this.pageObject = `\$SC${this.id}`
+    this.$pageObject = `\$SC${this.id}`
     this.$pageResponsePromise = new Promise(resolve => {
       this.$pageResponseResolve = resolve
     })

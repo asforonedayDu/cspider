@@ -1,5 +1,5 @@
 // const path = require('path')
-const CSpider = require('../../core/index')
+const {CSpider} = require('../../../index')
 var outerName = 'test'
 
 
