@@ -49,8 +49,20 @@ async function domcontentloadedHandler(...args) {
             script.setAttribute("src", "/jquery.js");
             document.head.insertBefore(script, document.head.lastChild);
         })
+        await this.$page.evaluate(function () {
+            return new Promise((resolve => {
+                const waitTimer = setInterval(() => {
+                    if (window.$) {
+                        clearInterval(waitTimer)
+                        resolve()
+                    }
+                }, 100)
+            }))
+        })
+        this.$pageInjectSuccessResolve()
+    } else {
+        this.$pageInjectSuccessResolve()
     }
-    this.$pageInjectSuccessResolve()
     return callAndWaitFunc.call(this, 'onDomcontentloaded', await this.$page.content())
 }
 
@@ -62,11 +74,12 @@ async function onLoadHandler(...args) {
 async function onRequestHandler(request) {
     if (/jquery\.js$/i.test(request.url())) {
         const content = fs.readFileSync(require.resolve('jquery'), 'utf-8')
-        return request.respond({
+        request.respond({
             status: 200,
             contentType: 'text/plain',
             body: content
         });
+        return
     }
     if (this.$pageEvents['request']) {
         return await this.$pageEvents.request(request)
