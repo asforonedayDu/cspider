@@ -68,7 +68,7 @@ class PriorityQueue extends BaseQueue {
       this.emitAsync('pull', item.data).then();
     }
     // 队列为空以及页面全部关闭
-    if (this._pendingCount === 0) {
+    if (this._pendingCount <= 0) {
       this._unwatch();
       this._resolveIdle()
       this.idlePromise = undefined
@@ -125,7 +125,7 @@ class PriorityQueue extends BaseQueue {
    * @return {!Promise}
    */
   onIdle() {
-    if (this._pendingCount === 0) {
+    if (this._pendingCount <= 0) {
       return Promise.resolve(true);
     }
     if (!this.idlePromise) {

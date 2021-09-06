@@ -21,13 +21,6 @@ function initCacheAndQueue(Spider) {
   }
   spiderPrototype.maxConcurrency = defaultMaxConcurrency
 
-
-  // spiderPrototype._cache = new SessionCache()
-  // spiderPrototype.$queue = new PriorityQueue({
-  //   maxConcurrency: this.maxConcurrency,
-  //   cache: this._cache,
-  // });
-
   spiderPrototype.onIdle = async function () {
     await this.onPageIdle()
     this.notifyQueue()
@@ -35,7 +28,7 @@ function initCacheAndQueue(Spider) {
   }
 
   spiderPrototype.notifyQueue = async function () {
-    if (!this._notifiedQueue) {
+    if (!this._notifiedQueue && !this.$page.$isCatched) {
       this.$queue.onPageClosed(this.id)
       this._notifiedQueue = true
     }
@@ -54,7 +47,3 @@ function initCacheAndQueue(Spider) {
 }
 
 module.exports = initCacheAndQueue
-
-class Aa {
-
-}

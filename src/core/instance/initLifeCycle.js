@@ -1,3 +1,5 @@
+const {callAndWaitFunc} = require('../libs/helper');
+
 let instanceId = 1
 
 function initLifeCycle(Spider) {
@@ -17,6 +19,7 @@ function initLifeCycle(Spider) {
       this.$pageInjectSuccessResolve = resolve
     })
     this.$pageEvents = {}
+    this.$history = []
     this.initQueue()
     this.enableJquery = true
   }
@@ -30,18 +33,14 @@ function initLifeCycle(Spider) {
   }
 
   Spider.prototype.lunch = async function () {
-    if (this.beforeOpenPage && (this.beforeOpenPage instanceof Function || this.beforeOpenPage instanceof Promise)) {
-      await this.beforeOpenPage()
-    }
+    await callAndWaitFunc.call(this, 'beforeOpenPage')
     this.$openPage(this.url).then()
   }
 
   Spider.prototype._beforeDestroy = async function () {
     if (this._beforeDestroyCalled) return
     this._beforeDestroyCalled = true
-    if (this.beforeDestroy) {
-      await this.beforeDestroy()
-    }
+    await callAndWaitFunc.call(this, 'beforeDestroy')
   }
 
   Spider.prototype._destroy = async function () {
@@ -50,10 +49,8 @@ function initLifeCycle(Spider) {
     this.$removePageEvent()
     this.$removeBrowserEvent()
     this.notifyQueue()
-    this.destroied = true
-    if (this.destroyed) {
-      await this.destroyed()
-    }
+    this.$destroyed = true
+    await callAndWaitFunc.call(this, 'destroyed')
     delete this.__proto__.__allInstance__[this.id]
   }
 }

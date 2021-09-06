@@ -1,6 +1,6 @@
 {
   "name": "cspider",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Distributed web crawler powered by Headless Chrome",
   "main": "index.js",
   "license": "MIT",
