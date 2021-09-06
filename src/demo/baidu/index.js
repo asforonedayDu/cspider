@@ -10,7 +10,6 @@ class Demo extends CSpider {
   }
 
   beforeOpenPage() {
-    this.waitFor = ''
     // this.viewPort = {}
     // const domain = '.baidu.com'
     // this.cookies = [{

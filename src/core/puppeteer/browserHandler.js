@@ -19,7 +19,7 @@ function bindBrowser(browser) {
     const page = getTargetPageInstance.call(this, browserContext._targetInfo.targetId)
     if (page) {
       page.$history.push(browserContext._targetInfo.url)
-      await callAndWaitFunc.call(page, 'onRedirect', ...page.$history.slice().reverse())
+      await page.$pageEvents.onRedirect(...page.$history.slice().reverse())
     } else {
       // console.log('not found target', browserContext._targetInfo.url)
     }
@@ -35,7 +35,7 @@ function bindBrowser(browser) {
             page.close()
           }
         }, 5000)
-        await callAndWaitFunc.call(originPage, 'onCreateNewPage', page)
+        await originPage.$pageEvents.onCreateNewPage(page)
       } else {
         // console.log('create new null page from origin page', originPageId, browserContext._targetInfo)
       }

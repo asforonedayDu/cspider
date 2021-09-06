@@ -18,7 +18,12 @@ function initLifeCycle(Spider) {
     this.$pageInjectSuccessPromise = new Promise(resolve => {
       this.$pageInjectSuccessResolve = resolve
     })
-    this.$pageEvents = {}
+    this.$pageEvents = {
+      onRedirect: () => {
+      },
+      onCreateNewPage: () => {
+      },
+    }
     this.$history = []
     this.initQueue()
     this.enableJquery = true

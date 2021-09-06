@@ -111,6 +111,12 @@ function bindPageEvent() {
       }
       if (key !== 'request') this.$page.on(key, this.$pageEvents[key]);
     })
+    if (events['onRedirect']) {
+      this.$pageEvents.onRedirect = events['onRedirect'].bind(this)
+    }
+    if (events['onCreateNewPage']) {
+      this.$pageEvents.onCreateNewPage = events['onCreateNewPage'].bind(this)
+    }
   }
   this.$page.on('request', this.__onRequestHandler);
 

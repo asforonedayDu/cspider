@@ -22,6 +22,18 @@ class Demo extends CSpider {
         // }
         request.continue()
       },
+
+      onRedirect(newUrl, oldUrl) {
+        console.log('网页重定向到了：', newUrl, '原地址：', oldUrl)
+      },
+
+      async onCreateNewPage(page) {
+        if (/movie\.douban/i.test(page.url())) {
+          console.log('获取到了新网页，并使用DianYing类处理：', page.url())
+          new DianYing().$catchPage(page)
+          await this.$closePage()
+        }
+      }
     }
   }
 
@@ -66,18 +78,6 @@ class Demo extends CSpider {
     }
   }
 
-  onRedirect(newUrl, oldUrl) {
-    console.log('网页重定向到了：', newUrl, '原地址：', oldUrl)
-  }
-
-  async onCreateNewPage(page) {
-    if (/movie\.douban/i.test(page.url())) {
-      console.log('获取到了新网页，并使用DianYing类处理：', page.url())
-      new DianYing().$catchPage(page)
-      await this.$closePage()
-    }
-  }
-
   async onDomcontentloaded(html) {
     console.log('模拟点击豆瓣电影')
     await this.runInPage()
@@ -104,6 +104,7 @@ class DianYing extends CSpider {
     await this.$closeBrowser()
   }
 }
+
 CSpider.onBeforeLunch(function (Puppeteer) {
   return {
     // headless: false,
